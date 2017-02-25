@@ -43,9 +43,9 @@ WashoutFilter::~WashoutFilter() {
 
 // 機能		：ウォッシュアウト処理
 // 引数		：航空機の並進加速度と角速度
-Position WashoutFilter::doFilter(const double &ax, const double &ay,
-                                 const double &az, const double &wphi,
-                                 const double &wsit, const double &wpsi) {
+Position WashoutFilter::calculateSimulatorPosition(
+    const double &ax, const double &ay, const double &az, const double &wphi,
+    const double &wsit, const double &wpsi) {
   //------------------------------------------//
   // Translation //
   //------------------------------------------//

@@ -1,14 +1,15 @@
-#include "Position.h"
+#include "MotionDriveAlgorithm.h"
 
 class Filter;
 
-class WashoutFilter {
+class WashoutFilter : public MotionDriveAlgorithm {
 public:
   WashoutFilter(unsigned int t_ms);
   ~WashoutFilter();
 
-  Position doFilter(const double &, const double &, const double &,
-                    const double &, const double &, const double &);
+  Position calculateSimulatorPosition(const double &, const double &,
+                                      const double &, const double &,
+                                      const double &, const double &);
   void setTranslationScale(const double &scale);
   void setRotationScale(const double &scale);
 
