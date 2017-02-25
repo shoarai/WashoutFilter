@@ -1,13 +1,15 @@
 #include "Washout.h"
-#include "Filter.h"
+#include "JAXAFilter.h"
+#include "typedef.h"
 
+#include <math.h>
 #include <iostream>	// memset用
 
-Washout::Washout(UINT t_ms, CDBL& tScale, CDBL& rScale) :
+Washout::Washout(unsigned int t_ms, const double& tScale, const double& rScale) :
 	time_ms(t_ms),
 	transScale(tScale),
 	rotateScale(rScale),
-	vecGs(0, 0, GRAVITY_mm)
+	GRAVITY_mm(9.80665 * 1000)
 {
 	// 初期化
 	m_x = m_y = m_z = m_phi = m_sit = m_psi = 0;
@@ -38,14 +40,21 @@ Washout::Washout(UINT t_ms, CDBL& tScale, CDBL& rScale) :
 
 Washout::~Washout()
 {
-	delete[] tHPF[3];
-	delete[] rLPF[3];
-	delete[] rHPF[3];
+	// TODO:
+	// delete[] tHPF[3];
+	// delete[] rLPF[3];
+	// delete[] rHPF[3];
 }
 
 // 機能		：ウォッシュアウト処理
 // 引数		：航空機の並進加速度と角速度
-void Washout::washout( CDBL& ax, CDBL& ay, CDBL& az, CDBL& wphi, CDBL& wsit, CDBL& wpsi )
+void Washout::washout(
+	const double& ax,
+	const double& ay,
+	const double& az,
+	const double& wphi,
+	const double& wsit,
+	const double& wpsi )
 {
 	//------------------------------------------//
 	// Translation								//
@@ -56,9 +65,9 @@ void Washout::washout( CDBL& ax, CDBL& ay, CDBL& az, CDBL& wphi, CDBL& wsit, CDB
 	double az_scale = az * transScale;
 
 	// 重力加速度を加える
-	double ax_g = ax_scale + vecGs.getx();
-	double ay_g = ay_scale + vecGs.gety();
-	double az_g = az_scale + vecGs.getz() - GRAVITY_mm;
+	double ax_g = ax_scale + gravityX;
+	double ay_g = ay_scale + gravityY;
+	double az_g = az_scale + gravityZ - GRAVITY_mm;
 
 	// 並進加速度をハイパスフィルタ処理する
 	double ax_hp = tHPF[0]->filtering( ax_g );
@@ -138,14 +147,11 @@ void Washout::washout( CDBL& ax, CDBL& ay, CDBL& az, CDBL& wphi, CDBL& wsit, CDB
 	double csit = cos( m_sit );
 
 	// 重力加速度gs
-	vecGs.set(
-		GRAVITY_mm *   (-ssit),
-		GRAVITY_mm * sphi * csit,
-		GRAVITY_mm * cphi * csit );
+	gravityX = GRAVITY_mm * (-ssit);
+	gravityY = GRAVITY_mm * sphi * csit;
+	gravityZ = GRAVITY_mm * cphi * csit;
 
-	//------------------------------------------//
-	// パイロットの体感加速度の算出				//
-	//------------------------------------------//
+	// パイロットの体感加速度の算出
 	stPilot.ax   = ax_hp + ax_lp;
 	stPilot.ay   = ay_hp + ay_lp;
 	stPilot.az   = az_hp;

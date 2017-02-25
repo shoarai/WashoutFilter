@@ -1,17 +1,19 @@
-#pragma once
-
-#include "..¥Vector¥Vector.h"
+// #include "../../arith/src/Vector.h"
 
 class Filter;
 
 class Washout{
 private:
-	UINT   time_ms;		// 計算周期
+	unsigned int time_ms;		// 計算周期
 	double transScale;	// 並進のスケール
 	double rotateScale;	// 回転のスケール
 
 	// 重力加速度gs
-	Vector vecGs;
+	// arith::Vector vecGs;
+	double gravityX;
+	double gravityY;
+	double gravityZ;
+	const double GRAVITY_mm;	// �d�͉����x[mm/s2]
 
 	// 出力値
 	double m_x, m_y, m_z, m_phi, m_sit, m_psi;
@@ -35,22 +37,22 @@ private:
 	// インライン								//
 	//------------------------------------------//
 	// 積分
-	inline double timeInteg(CDBL& x, CDBL& v){
-		return (x + v * msec2sec(time_ms));
+	inline double timeInteg(const double& x, const double& v){
+		return (x + v * time_ms / 1000);
 	}
 
 public:
-	Washout(UINT t_ms, CDBL& tScale = 1, CDBL& rScale = 1);
+	Washout(unsigned int t_ms, const double& tScale = 1, const double& rScale = 1);
 	~Washout();
 
 	// ウォッシュアウト処理
-	void washout(CDBL&, CDBL&, CDBL&, CDBL&, CDBL&, CDBL& );
+	void washout(const double&, const double&, const double&, const double&, const double&, const double& );
 
 	// 変数取得
-	CDBL getx()	  const{ return m_x; };
-	CDBL gety()	  const{ return m_y; };
-	CDBL getz()	  const{ return m_z; };
-	CDBL getPhi() const{ return m_phi; };
-	CDBL getSit() const{ return m_sit; };
-	CDBL getPsi() const{ return m_psi; };
+	const double getx()	  const{ return m_x; };
+	const double gety()	  const{ return m_y; };
+	const double getz()	  const{ return m_z; };
+	const double getPhi() const{ return m_phi; };
+	const double getSit() const{ return m_sit; };
+	const double getPsi() const{ return m_psi; };
 };
