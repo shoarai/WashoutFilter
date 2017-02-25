@@ -9,14 +9,14 @@ Washout washout(interval);
 
 int main() {
   for (size_t i = 0; i < 4; i++) {
-    washout.doFilter(0, 1, 2, 3, 4, 5);
+    Position position = washout.doFilter(0, 1, 2, 3, 4, 5);
 
-    cout << "x: " << washout.getx() << '\n';
-    cout << "y: " << washout.gety() << '\n';
-    cout << "z: " << washout.getz() << '\n';
-    cout << "phi: " << washout.getPhi() << '\n';
-    cout << "theta: " << washout.getSit() << '\n';
-    cout << "psi: " << washout.getPsi() << '\n';
+    cout << "x: " << position.getTranslationX() << '\n';
+    cout << "y: " << position.getTranslationY() << '\n';
+    cout << "z: " << position.getTranslationZ() << '\n';
+    cout << "phi: " << position.getRotationX() << '\n';
+    cout << "theta: " << position.getRotationY() << '\n';
+    cout << "psi: " << position.getRotationZ() << '\n';
     sleep(1);
   }
 

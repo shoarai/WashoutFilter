@@ -1,5 +1,3 @@
-// #pragma once
-
 class Filter {
 protected:
   // データ遅れ
