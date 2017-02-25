@@ -1,6 +1,6 @@
 #include "../src/Washout.h"
-#include <iostream>
 #include "unistd.h"
+#include <iostream>
 
 using namespace std;
 
@@ -9,7 +9,7 @@ Washout washout(interval);
 
 int main() {
   for (size_t i = 0; i < 4; i++) {
-    washout.washout(0,1,2,3,4,5);
+    washout.doFilter(0, 1, 2, 3, 4, 5);
 
     cout << "x: " << washout.getx() << '\n';
     cout << "y: " << washout.gety() << '\n';
