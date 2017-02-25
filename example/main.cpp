@@ -16,7 +16,8 @@ int main() {
   WashoutFilter washout(interval);
 
   for (size_t i = 0; i < 4; i++) {
-    Position position = washout.calculateSimulatorPosition(0, 1, 2, 3, 4, 5);
+    Motion motion(0, 1, 2, 3, 4, 5);
+    Position position = washout.calculateSimulatorPosition(motion);
 
     cout << "x: " << position.getTranslationX() << '\n';
     cout << "y: " << position.getTranslationY() << '\n';

@@ -43,16 +43,14 @@ WashoutFilter::~WashoutFilter() {
 
 // 機能		：ウォッシュアウト処理
 // 引数		：航空機の並進加速度と角速度
-Position WashoutFilter::calculateSimulatorPosition(
-    const double &ax, const double &ay, const double &az, const double &wphi,
-    const double &wsit, const double &wpsi) {
+Position WashoutFilter::calculateSimulatorPosition(Motion &motion) {
   //------------------------------------------//
   // Translation //
   //------------------------------------------//
   // フィルタスケール
-  double ax_scale = ax * transScale;
-  double ay_scale = ay * transScale;
-  double az_scale = az * transScale;
+  double ax_scale = motion.getAccelerationX() * transScale;
+  double ay_scale = motion.getAccelerationY() * transScale;
+  double az_scale = motion.getAccelerationZ() * transScale;
 
   // 重力加速度を加える
   double ax_g = ax_scale + gravityX;
@@ -105,9 +103,9 @@ Position WashoutFilter::calculateSimulatorPosition(
   // Rotation //
   //------------------------------------------//
   // フィルタスケール
-  double vphi_scale = wphi * rotateScale;
-  double vsit_scale = wsit * rotateScale;
-  double vpsi_scale = wpsi * rotateScale;
+  double vphi_scale = motion.getAngularVelocityX() * rotateScale;
+  double vsit_scale = motion.getAngularVelocityY() * rotateScale;
+  double vpsi_scale = motion.getAngularVelocityZ() * rotateScale;
 
   // 角速度をハイパスフィルタ処理する
   double wphi_hp = rHPF[0]->doFilter(vphi_scale);

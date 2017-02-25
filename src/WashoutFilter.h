@@ -7,9 +7,7 @@ public:
   WashoutFilter(unsigned int t_ms);
   ~WashoutFilter();
 
-  Position calculateSimulatorPosition(const double &, const double &,
-                                      const double &, const double &,
-                                      const double &, const double &);
+  Position calculateSimulatorPosition(Motion &motion);
   void setTranslationScale(const double &scale);
   void setRotationScale(const double &scale);
 
