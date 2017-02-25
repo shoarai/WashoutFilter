@@ -1,15 +1,15 @@
-#include "Washout.h"
+#include "WashoutFilter.h"
 #include "JAXAFilter.h"
 #include "typedef.h"
 
 #include <iostream> // memset用
 #include <math.h>
 
-Washout::Washout(unsigned int t_ms, const double &tScale, const double &rScale)
-    : time_ms(t_ms), transScale(tScale), rotateScale(rScale),
-      GRAVITY_mm(9.80665 * 1000) {
-  // 初期化
-  m_vx = m_vy = m_vz = phi_t = phi_r = sit_t = sit_r = 0;
+WashoutFilter::WashoutFilter(unsigned int interval_ms)
+    : interval_ms(interval_ms), GRAVITY_mm(9.80665 * 1000), m_x(), m_y(), m_z(),
+      m_phi(), m_sit(), m_psi(), m_vx(), m_vy(), m_vz(), phi_t(), phi_r(),
+      sit_t(), sit_r(), gravityX(), gravityY(), gravityZ(), transScale(1),
+      rotateScale(1) {
 
   memset(&stPilot, 0, sizeof(stPilot));
 
@@ -19,22 +19,22 @@ Washout::Washout(unsigned int t_ms, const double &tScale, const double &rScale)
   double damp = 1;               // ζLP：ダンピング係数
 
   // Translationのハイパスフィルタ
-  tHPF[0] = new JAXA_tHPF(time_ms, freq_wn);
-  tHPF[1] = new JAXA_tHPF(time_ms, freq_wn);
-  tHPF[2] = new JAXA_tHPF(time_ms, freq_wn);
+  tHPF[0] = new JAXA_tHPF(interval_ms, freq_wn);
+  tHPF[1] = new JAXA_tHPF(interval_ms, freq_wn);
+  tHPF[2] = new JAXA_tHPF(interval_ms, freq_wn);
 
   // Tilt-Coordinationのローパスフィルタ
-  rLPF[0] = new JAXA_tLPF(time_ms, freq_wlp, damp);
-  rLPF[1] = new JAXA_tLPF(time_ms, freq_wlp, damp);
-  rLPF[2] = new JAXA_tLPF(time_ms, freq_wlp, damp);
+  rLPF[0] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
+  rLPF[1] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
+  rLPF[2] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
 
   // Rotationのハイパスフィルタ
-  rHPF[0] = new JAXA_rHPF(time_ms, freq_wn);
-  rHPF[1] = new JAXA_rHPF(time_ms, freq_wn);
-  rHPF[2] = new JAXA_rHPF(time_ms, freq_wn);
+  rHPF[0] = new JAXA_rHPF(interval_ms, freq_wn);
+  rHPF[1] = new JAXA_rHPF(interval_ms, freq_wn);
+  rHPF[2] = new JAXA_rHPF(interval_ms, freq_wn);
 }
 
-Washout::~Washout() {
+WashoutFilter::~WashoutFilter() {
   // TODO:
   // delete[] tHPF[3];
   // delete[] rLPF[3];
@@ -43,9 +43,9 @@ Washout::~Washout() {
 
 // 機能		：ウォッシュアウト処理
 // 引数		：航空機の並進加速度と角速度
-Position Washout::doFilter(const double &ax, const double &ay, const double &az,
-                           const double &wphi, const double &wsit,
-                           const double &wpsi) {
+Position WashoutFilter::doFilter(const double &ax, const double &ay,
+                                 const double &az, const double &wphi,
+                                 const double &wsit, const double &wpsi) {
   //------------------------------------------//
   // Translation //
   //------------------------------------------//
@@ -70,9 +70,9 @@ Position Washout::doFilter(const double &ax, const double &ay, const double &az,
   m_vz = timeInteg(m_vz, az_hp);
 
   // 変位算出
-  double m_x = timeInteg(m_x, m_vx);
-  double m_y = timeInteg(m_y, m_vy);
-  double m_z = timeInteg(m_z, m_vz);
+  m_x = timeInteg(m_x, m_vx);
+  m_y = timeInteg(m_y, m_vy);
+  m_z = timeInteg(m_z, m_vz);
 
   //------------------------------------------//
   // Tilt-coordination						//
@@ -117,14 +117,14 @@ Position Washout::doFilter(const double &ax, const double &ay, const double &az,
   // 回転運動の角度を算出する
   phi_r = timeInteg(phi_r, wphi_hp);
   sit_r = timeInteg(sit_r, wsit_hp);
-  double m_psi = timeInteg(m_psi, wpsi_hp);
+  m_psi = timeInteg(m_psi, wpsi_hp);
 
   //------------------------------------------//
   // Tilt角 ＋ Rotation角						//
   //------------------------------------------//
   // Tilt-coordinationとRotationの角度を加算する
-  double m_phi = phi_t + phi_r;
-  double m_sit = sit_t + sit_r;
+  m_phi = phi_t + phi_r;
+  m_sit = sit_t + sit_r;
 
   //------------------------------------------//
   // 重力加速度gsの算出						//
@@ -178,4 +178,11 @@ Position Washout::doFilter(const double &ax, const double &ay, const double &az,
 
   Position position(m_x, m_y, m_z, m_phi, m_sit, m_psi);
   return position;
+}
+
+void WashoutFilter::setTranslationScale(const double &scale) {
+  transScale = scale;
+}
+void WashoutFilter::setRotationScale(const double &scale) {
+  rotateScale = scale;
 }
