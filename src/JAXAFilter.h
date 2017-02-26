@@ -1,38 +1,29 @@
-#include "Filter.h"
+#include "MotionFilter.h"
 
 // Translationのハイパスフィルタ
-class JAXA_tHPF : public Filter {
+class JAXA_tHPF : public MotionFilter {
 public:
-  // コンストラクタ
   explicit JAXA_tHPF(unsigned int t_ms, const double &cutoff)
-      : Filter(t_ms, cutoff){};
-
-  // フィルタリング
+      : MotionFilter(t_ms, cutoff){};
   double doFilter(const double &);
 };
 
 // Tilt-Coordinationのローパスフィルタ
-class JAXA_tLPF : public Filter {
+class JAXA_tLPF : public MotionFilter {
 private:
   // ダンピング係数
   double damp;
 
 public:
-  // コンストラクタ
   explicit JAXA_tLPF(unsigned int t_ms, const double &cutoff, const double &dmp)
-      : Filter(t_ms, cutoff), damp(dmp){};
-
-  // フィルタリング
+      : MotionFilter(t_ms, cutoff), damp(dmp){};
   double doFilter(const double &);
 };
 
 // Rotationのハイパスフィルタ
-class JAXA_rHPF : public Filter {
+class JAXA_rHPF : public MotionFilter {
 public:
-  // コンストラクタ
   explicit JAXA_rHPF(unsigned int t_ms, const double &cutoff)
-      : Filter(t_ms, cutoff){};
-
-  // フィルタリング
+      : MotionFilter(t_ms, cutoff){};
   double doFilter(const double &);
 };
