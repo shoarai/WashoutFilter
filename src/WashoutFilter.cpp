@@ -16,16 +16,16 @@ WashoutFilter::WashoutFilter(Filter *TranslationHighPassFilter[3],
       rotateScale(1) {
   memset(&stPilot, 0, sizeof(stPilot));
 
-  tHPF[0] = TranslationHighPassFilter[0];
-  tHPF[1] = TranslationHighPassFilter[1];
-  tHPF[2] = TranslationHighPassFilter[2];
+  tHPFs[0] = TranslationHighPassFilter[0];
+  tHPFs[1] = TranslationHighPassFilter[1];
+  tHPFs[2] = TranslationHighPassFilter[2];
 
-  rLPF[0] = TranslationLowPassFilter[0];
-  rLPF[1] = TranslationLowPassFilter[1];
+  rLPFs[0] = TranslationLowPassFilter[0];
+  rLPFs[1] = TranslationLowPassFilter[1];
 
-  rHPF[0] = RotationHighPassFilter[0];
-  rHPF[1] = RotationHighPassFilter[1];
-  rHPF[2] = RotationHighPassFilter[2];
+  rHPFs[0] = RotationHighPassFilter[0];
+  rHPFs[1] = RotationHighPassFilter[1];
+  rHPFs[2] = RotationHighPassFilter[2];
 }
 
 WashoutFilter::~WashoutFilter() {
@@ -52,9 +52,9 @@ Position WashoutFilter::calculateSimulatorPosition(Motion &motion) {
   double az_g = az_scale + gravityZ - GRAVITY_mm;
 
   // 並進加速度をハイパスフィルタ処理する
-  double ax_hp = tHPF[0]->doFilter(ax_g);
-  double ay_hp = tHPF[1]->doFilter(ay_g);
-  double az_hp = tHPF[2]->doFilter(az_g);
+  double ax_hp = tHPFs[0]->doFilter(ax_g);
+  double ay_hp = tHPFs[1]->doFilter(ay_g);
+  double az_hp = tHPFs[2]->doFilter(az_g);
 
   // 速度算出
   m_vx = timeInteg(m_vx, ax_hp);
@@ -70,8 +70,8 @@ Position WashoutFilter::calculateSimulatorPosition(Motion &motion) {
   // Tilt-coordination						//
   //------------------------------------------//
   // ローパスフィルタ処理
-  double ax_lp = rLPF[0]->doFilter(ax_scale);
-  double ay_lp = rLPF[1]->doFilter(ay_scale);
+  double ax_lp = rLPFs[0]->doFilter(ax_scale);
+  double ay_lp = rLPFs[1]->doFilter(ay_scale);
 
   // 持続加速度を傾斜角に変換する
   sit_t = -asin(ax_lp / GRAVITY_mm);
@@ -102,9 +102,9 @@ Position WashoutFilter::calculateSimulatorPosition(Motion &motion) {
   double vpsi_scale = motion.getAngularVelocityZ() * rotateScale;
 
   // 角速度をハイパスフィルタ処理する
-  double wphi_hp = rHPF[0]->doFilter(vphi_scale);
-  double wsit_hp = rHPF[1]->doFilter(vsit_scale);
-  double wpsi_hp = rHPF[2]->doFilter(vpsi_scale);
+  double wphi_hp = rHPFs[0]->doFilter(vphi_scale);
+  double wsit_hp = rHPFs[1]->doFilter(vsit_scale);
+  double wpsi_hp = rHPFs[2]->doFilter(vpsi_scale);
 
   // 回転運動の角度を算出する
   phi_r = timeInteg(phi_r, wphi_hp);

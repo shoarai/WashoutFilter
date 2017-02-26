@@ -16,9 +16,9 @@ public:
   void setRotationScale(const double &scale);
 
 private:
-  Filter *tHPF[3];
-  Filter *rLPF[2];
-  Filter *rHPF[3];
+  Filter *tHPFs[3];
+  Filter *rLPFs[2];
+  Filter *rHPFs[3];
 
   // 重力加速度gs
   const double GRAVITY_mm; // 重力加速度[mm/s2]
