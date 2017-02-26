@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #include "../src/MotionFilter.h"
 
 // Translationのハイパスフィルタ

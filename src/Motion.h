@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 class Motion {
 public:
   Motion(const double &accelerationX, const double &accelerationY,

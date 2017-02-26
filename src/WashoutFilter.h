@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #include "MotionDriveAlgorithm.h"
 
 #include "Filter.h"

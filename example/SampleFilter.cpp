@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #include "SampleFilter.h"
 
 // 機能		：Translationのハイパスフィルタ

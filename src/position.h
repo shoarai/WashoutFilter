@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 class Position {
 public:
   Position(const double &translationX, const double &translationY,

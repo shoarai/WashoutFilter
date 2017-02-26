@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #pragma once
 
 class Filter {

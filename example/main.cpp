@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #include "SampleWashoutFilter.h"
 #include "unistd.h"
 #include <iostream>

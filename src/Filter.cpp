@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #include "MotionFilter.h"
 
 MotionFilter::MotionFilter(unsigned int t_ms, const double &cutoff)

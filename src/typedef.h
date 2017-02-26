@@ -1,3 +1,5 @@
+// Copyright (c) 2017 shoarai
+
 #define _USE_MATH_DEFINES // π用
 
 #include <math.h>
