@@ -1,4 +1,4 @@
-#include "MotionFilter.h"
+#include "../src/MotionFilter.h"
 
 // Translationのハイパスフィルタ
 class JAXA_tHPF : public MotionFilter {

@@ -1,37 +1,29 @@
 #include "WashoutFilter.h"
-#include "JAXAFilter.h"
 #include "typedef.h"
 
 #include <iostream> // memset用
 #include <math.h>
 
-WashoutFilter::WashoutFilter(unsigned int interval_ms)
+WashoutFilter::WashoutFilter(Filter *TranslationHighPassFilter[3],
+                             Filter *TranslationLowPassFilter[2],
+                             Filter *RotationHighPassFilter[3],
+                             unsigned int interval_ms)
     : interval_ms(interval_ms), GRAVITY_mm(9.80665 * 1000), m_x(), m_y(), m_z(),
       m_phi(), m_sit(), m_psi(), m_vx(), m_vy(), m_vz(), phi_t(), phi_r(),
       sit_t(), sit_r(), gravityX(), gravityY(), gravityZ(), transScale(1),
       rotateScale(1) {
-
   memset(&stPilot, 0, sizeof(stPilot));
 
-  // フィルタ変数
-  double freq_wn = 2.5;          // ωn ：折れ点周波数（ハイパス）
-  double freq_wlp = 2 * freq_wn; // ωLP：折れ点周波数（ローパス）
-  double damp = 1;               // ζLP：ダンピング係数
+  tHPF[0] = TranslationHighPassFilter[0];
+  tHPF[1] = TranslationHighPassFilter[1];
+  tHPF[2] = TranslationHighPassFilter[2];
 
-  // Translationのハイパスフィルタ
-  tHPF[0] = new JAXA_tHPF(interval_ms, freq_wn);
-  tHPF[1] = new JAXA_tHPF(interval_ms, freq_wn);
-  tHPF[2] = new JAXA_tHPF(interval_ms, freq_wn);
+  rLPF[0] = TranslationLowPassFilter[0];
+  rLPF[1] = TranslationLowPassFilter[1];
 
-  // Tilt-Coordinationのローパスフィルタ
-  rLPF[0] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
-  rLPF[1] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
-  rLPF[2] = new JAXA_tLPF(interval_ms, freq_wlp, damp);
-
-  // Rotationのハイパスフィルタ
-  rHPF[0] = new JAXA_rHPF(interval_ms, freq_wn);
-  rHPF[1] = new JAXA_rHPF(interval_ms, freq_wn);
-  rHPF[2] = new JAXA_rHPF(interval_ms, freq_wn);
+  rHPF[0] = RotationHighPassFilter[0];
+  rHPF[1] = RotationHighPassFilter[1];
+  rHPF[2] = RotationHighPassFilter[2];
 }
 
 WashoutFilter::~WashoutFilter() {

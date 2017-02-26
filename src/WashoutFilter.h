@@ -1,10 +1,12 @@
 #include "MotionDriveAlgorithm.h"
 
-class Filter;
+#include "Filter.h"
 
 class WashoutFilter : public MotionDriveAlgorithm {
 public:
-  WashoutFilter(unsigned int t_ms);
+  WashoutFilter(Filter *TranslationHighPassFilter[3],
+                Filter *TranslationLowPassFilter[2],
+                Filter *RotationHighPassFilter[3], unsigned int t_ms);
   ~WashoutFilter();
 
   Position calculateSimulatorPosition(Motion &motion);
@@ -13,7 +15,7 @@ public:
 
 private:
   Filter *tHPF[3];
-  Filter *rLPF[3];
+  Filter *rLPF[2];
   Filter *rHPF[3];
 
   unsigned int interval_ms; // 計算周期
@@ -37,6 +39,6 @@ private:
 
   // 積分
   inline double timeInteg(const double &x, const double &v) {
-    return (x + v * interval_ms / 1000);
+    return (x + (v * interval_ms / 1000));
   }
 };
