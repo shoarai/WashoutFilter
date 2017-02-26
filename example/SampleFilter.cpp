@@ -1,7 +1,7 @@
-#include "JAXAFilter.h"
+#include "SampleFilter.h"
 
 // 機能		：Translationのハイパスフィルタ
-double JAXA_tHPF::doFilter(const double &input0) {
+double Sample_tHPF::doFilter(const double &input0) {
   // 入力値に引数を代入
   input[DELAY_0] = input0;
 
@@ -24,7 +24,7 @@ double JAXA_tHPF::doFilter(const double &input0) {
 }
 
 // 機能		：Tilt-coordinationのローパスフィルタ
-double JAXA_tLPF::doFilter(const double &input0) {
+double Sample_tLPF::doFilter(const double &input0) {
   // 入力値に引数を代入
   input[DELAY_0] = input0;
 
@@ -49,7 +49,7 @@ double JAXA_tLPF::doFilter(const double &input0) {
 }
 
 // 機能		：Rotationのハイパスフィルタ
-double JAXA_rHPF::doFilter(const double &input0) {
+double Sample_rHPF::doFilter(const double &input0) {
   // 入力値に引数を代入
   input[DELAY_0] = input0;
 

@@ -16,5 +16,4 @@ protected:
 public:
   explicit MotionFilter(unsigned int t, const double &cutoff);
   virtual ~MotionFilter(){};
-  // virtual double doFilter(const double &) = 0;
 };

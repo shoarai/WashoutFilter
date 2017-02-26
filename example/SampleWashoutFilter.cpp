@@ -1,29 +1,30 @@
 #include "SampleWashoutFilter.h"
-#include "JAXAFilter.h"
+#include "SampleFilter.h"
 
 SampleWashoutFilter::SampleWashoutFilter(const double &interval_ms) {
-  double breakFrequencyForHighPass = 2.5; // ωn ：折れ点周波数（ハイパス）
+  double breakFrequencyForHighPass = 2.5; // ωn: 折れ点周波数（ハイパス）
   double breakFrequencyForLowPass =
-      2 * breakFrequencyForHighPass; // ωLP：折れ点周波数（ローパス）
-  double dampingRatio = 1;           // ζLP：ダンピング係数
+      2 * breakFrequencyForHighPass; // ωLP: 折れ点周波数（ローパス）
+  double dampingRatio = 1;           // ζLP: ダンピング係数
 
-  Filter *tHPF[3];
-  Filter *rLPF[2];
-  Filter *rHPF[3];
+  int translationHighPassFilterNum = 3;
+  int translationLowPassFilterNum = 2;
+  int rotationHighPassFilterNum = 3;
 
-  // Translationのハイパスフィルタ
-  tHPF[0] = new JAXA_tHPF(interval_ms, breakFrequencyForHighPass);
-  tHPF[1] = new JAXA_tHPF(interval_ms, breakFrequencyForHighPass);
-  tHPF[2] = new JAXA_tHPF(interval_ms, breakFrequencyForHighPass);
+  Filter *tHPF[translationHighPassFilterNum];
+  Filter *rLPF[translationLowPassFilterNum];
+  Filter *rHPF[rotationHighPassFilterNum];
 
-  // Tilt-Coordinationのローパスフィルタ
-  rLPF[0] = new JAXA_tLPF(interval_ms, breakFrequencyForLowPass, dampingRatio);
-  rLPF[1] = new JAXA_tLPF(interval_ms, breakFrequencyForLowPass, dampingRatio);
-
-  // Rotationのハイパスフィルタ
-  rHPF[0] = new JAXA_rHPF(interval_ms, breakFrequencyForHighPass);
-  rHPF[1] = new JAXA_rHPF(interval_ms, breakFrequencyForHighPass);
-  rHPF[2] = new JAXA_rHPF(interval_ms, breakFrequencyForHighPass);
+  for (int i = 0; i < translationHighPassFilterNum; i++) {
+    tHPF[i] = new Sample_tHPF(interval_ms, breakFrequencyForHighPass);
+  }
+  for (int i = 0; i < translationLowPassFilterNum; i++) {
+    rLPF[i] =
+        new Sample_tLPF(interval_ms, breakFrequencyForLowPass, dampingRatio);
+  }
+  for (int i = 0; i < rotationHighPassFilterNum; i++) {
+    rHPF[i] = new Sample_rHPF(interval_ms, breakFrequencyForHighPass);
+  }
 
   washout = new WashoutFilter(tHPF, rLPF, rHPF, interval_ms);
 }

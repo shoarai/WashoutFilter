@@ -18,19 +18,19 @@ private:
   Filter *rLPF[2];
   Filter *rHPF[3];
 
-  unsigned int interval_ms; // 計算周期
-  double transScale;        // 並進のスケール
-  double rotateScale;       // 回転のスケール
-
   // 重力加速度gs
+  const double GRAVITY_mm; // 重力加速度[mm/s2]
   double gravityX;
   double gravityY;
   double gravityZ;
-  const double GRAVITY_mm; // �d�͉����x[mm/s2]
 
   // 中間媒介変数、速度、角度
   double m_vx, m_vy, m_vz, phi_t, phi_r, sit_t, sit_r;
   double m_x, m_y, m_z, m_phi, m_sit, m_psi;
+
+  unsigned int interval_ms; // 計算周期
+  double transScale;        // 並進のスケール
+  double rotateScale;       // 回転のスケール
 
   // パイロットの体感運動
   struct st6DOF {
@@ -41,4 +41,14 @@ private:
   inline double timeInteg(const double &x, const double &v) {
     return (x + (v * interval_ms / 1000));
   }
+
+  // class Integrator {
+  // public:
+  //   Integrator() : value(){};
+  //   double getValue() { return value; }
+  //   void add(double v) { value += v; }
+  //
+  // private:
+  //   double value;
+  // };
 };
