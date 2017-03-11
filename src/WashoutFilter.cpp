@@ -37,7 +37,7 @@ WashoutFilter::~WashoutFilter() {
 
 // 機能		：ウォッシュアウト処理
 // 引数		：航空機の並進加速度と角速度
-Position WashoutFilter::calculateSimulatorPosition(Motion &motion) {
+Position WashoutFilter::doFilter(Motion &motion) {
   //------------------------------------------//
   // Translation //
   //------------------------------------------//

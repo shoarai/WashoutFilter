@@ -34,6 +34,6 @@ SampleWashoutFilter::SampleWashoutFilter(const double &interval_ms) {
 
 SampleWashoutFilter::~SampleWashoutFilter() { delete washout; }
 
-Position SampleWashoutFilter::calculateSimulatorPosition(Motion &motion) {
-  return washout->calculateSimulatorPosition(motion);
+Position SampleWashoutFilter::doFilter(Motion &motion) {
+  return washout->doFilter(motion);
 }

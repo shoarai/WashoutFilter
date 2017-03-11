@@ -2,6 +2,7 @@
 
 class Position {
 public:
+  Position() : m_x(), m_y(), m_z(), m_phi(), m_theta(), m_psi() {}
   Position(const double &translationX, const double &translationY,
            const double &translationZ, const double &rotationX,
            const double &rotationY, const double &rotationZ)

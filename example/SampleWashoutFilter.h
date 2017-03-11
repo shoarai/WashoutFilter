@@ -2,11 +2,11 @@
 
 #include "../src/WashoutFilter.h"
 
-class SampleWashoutFilter : public MotionDriveAlgorithm {
+class SampleWashoutFilter : public IWashoutFilter {
 public:
   SampleWashoutFilter(const double &interval_ms);
   ~SampleWashoutFilter();
-  Position calculateSimulatorPosition(Motion &motion);
+  Position doFilter(Motion &motion);
 
 private:
   WashoutFilter *washout;

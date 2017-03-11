@@ -1,17 +1,17 @@
 // Copyright (c) 2017 shoarai
 
-#include "MotionDriveAlgorithm.h"
+#include "IWashoutFilter.h"
 
 #include "Filter.h"
 
-class WashoutFilter : public MotionDriveAlgorithm {
+class WashoutFilter : public IWashoutFilter {
 public:
   WashoutFilter(Filter *TranslationHighPassFilter[3],
                 Filter *TranslationLowPassFilter[2],
                 Filter *RotationHighPassFilter[3], unsigned int t_ms);
   ~WashoutFilter();
 
-  Position calculateSimulatorPosition(Motion &motion);
+  Position doFilter(Motion &motion);
   void setTranslationScale(const double &scale);
   void setRotationScale(const double &scale);
 
@@ -43,14 +43,4 @@ private:
   inline double timeInteg(const double &x, const double &v) {
     return (x + (v * interval_ms / 1000));
   }
-
-  // class Integrator {
-  // public:
-  //   Integrator() : value(){};
-  //   double getValue() { return value; }
-  //   void add(double v) { value += v; }
-  //
-  // private:
-  //   double value;
-  // };
 };
