@@ -17,8 +17,6 @@ WashoutFilter::WashoutFilter(
       gravityX(), gravityY(), gravityZ(),
       transScale(1), rotateScale(1)
 {
-  memset(&stPilot, 0, sizeof(stPilot));
-
   tHPFs[0] = TranslationHighPassFilter[0];
   tHPFs[1] = TranslationHighPassFilter[1];
   tHPFs[2] = TranslationHighPassFilter[2];
@@ -126,43 +124,9 @@ Position WashoutFilter::doFilter(Motion &motion)
   double cphi = cos(m_phi);
   double ssit = sin(m_sit);
   double csit = cos(m_sit);
-
   gravityX = GRAVITY_mm * (-ssit);
   gravityY = GRAVITY_mm * sphi * csit;
   gravityZ = GRAVITY_mm * cphi * csit;
-
-  stPilot.ax = ax_hp + ax_lp;
-  stPilot.ay = ay_hp + ay_lp;
-  stPilot.az = az_hp;
-  stPilot.wphi = wphi_hp;
-  stPilot.wsit = wsit_hp;
-  stPilot.wpsi = wpsi_hp;
-
-  sphi = sin(0.0);
-  cphi = cos(0.0);
-  ssit = sin(0.0);
-  csit = cos(0.0);
-  double spsi = sin(m_psi);
-  double cpsi = cos(m_psi);
-
-  double rotaionMatrix[3][3] = {
-      {csit * cpsi, csit * spsi, -ssit},
-      {sphi * ssit * cpsi - cphi * spsi, sphi * ssit * spsi + cphi * cpsi,
-       sphi * csit},
-      {cphi * ssit * cpsi - sphi * spsi, cphi * ssit * spsi - sphi * cpsi,
-       cphi * csit},
-  };
-
-  double pi_ax = stPilot.ax * rotaionMatrix[0][0] + stPilot.ay * rotaionMatrix[1][0] +
-                 stPilot.az * rotaionMatrix[2][0];
-  double pi_ay = stPilot.ax * rotaionMatrix[0][1] + stPilot.ay * rotaionMatrix[1][1] +
-                 stPilot.az * rotaionMatrix[2][1];
-  double pi_az = stPilot.ax * rotaionMatrix[0][2] + stPilot.ay * rotaionMatrix[1][2] +
-                 stPilot.az * rotaionMatrix[2][2];
-
-  stPilot.ax = pi_ax;
-  stPilot.ay = pi_ay;
-  stPilot.az = pi_az;
 
   Position position(m_x, m_y, m_z, m_phi, m_sit, m_psi);
   return position;

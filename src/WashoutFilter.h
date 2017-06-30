@@ -34,11 +34,6 @@ private:
   double transScale;        // Scale for translation
   double rotateScale;       // Scale for rotation
 
-  struct st6DOF
-  {
-    double ax, ay, az, wphi, wsit, wpsi;
-  } stPilot;
-
   inline double timeInteg(const double &x, const double &v)
   {
     return (x + (v * interval_ms / 1000));
