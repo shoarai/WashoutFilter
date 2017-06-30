@@ -1,13 +1,16 @@
 // Copyright (c) 2017 shoarai
 
-class Motion {
+class Motion
+{
 public:
-  Motion(const double &accelerationX, const double &accelerationY,
-         const double &accelerationZ, const double &angularVelocityX,
-         const double &angularVelocityY, const double &angularVelocityZ)
+  Motion(const double &accelerationX,
+         const double &accelerationY,
+         const double &accelerationZ,
+         const double &angularVelocityX,
+         const double &angularVelocityY,
+         const double &angularVelocityZ)
       : aX(accelerationX), aY(accelerationY), aZ(accelerationZ),
-        vPhi(angularVelocityX), vTheta(angularVelocityY),
-        vPsi(angularVelocityZ) {}
+        vPhi(angularVelocityX), vTheta(angularVelocityY), vPsi(angularVelocityZ) {}
   ~Motion(){};
 
   const double getAccelerationX() const { return aX; };

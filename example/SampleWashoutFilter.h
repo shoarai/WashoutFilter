@@ -2,7 +2,8 @@
 
 #include "../src/WashoutFilter.h"
 
-class SampleWashoutFilter : public IWashoutFilter {
+class SampleWashoutFilter : public IWashoutFilter
+{
 public:
   SampleWashoutFilter(const double &interval_ms);
   ~SampleWashoutFilter();

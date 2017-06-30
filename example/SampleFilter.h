@@ -2,31 +2,31 @@
 
 #include "../src/MotionFilter.h"
 
-// Translationのハイパスフィルタ
-class Sample_tHPF : public MotionFilter {
+class Sample_translationHighPassFilter : public MotionFilter
+{
 public:
-  explicit Sample_tHPF(unsigned int t_ms, const double &cutoff)
+  explicit Sample_translationHighPassFilter(unsigned int t_ms, const double &cutoff)
       : MotionFilter(t_ms, cutoff){};
   double doFilter(const double &);
 };
 
-// Tilt-Coordinationのローパスフィルタ
-class Sample_tLPF : public MotionFilter {
+class Sample_translationLowPassFilter : public MotionFilter
+{
 private:
-  // ダンピング係数
-  double damp;
+  // Dampinging coefficient
+  double damping;
 
 public:
-  explicit Sample_tLPF(unsigned int t_ms, const double &cutoff,
-                       const double &dmp)
-      : MotionFilter(t_ms, cutoff), damp(dmp){};
+  explicit Sample_translationLowPassFilter(unsigned int t_ms, const double &cutoff,
+                                           const double &dmp)
+      : MotionFilter(t_ms, cutoff), damping(dmp){};
   double doFilter(const double &);
 };
 
-// Rotationのハイパスフィルタ
-class Sample_rHPF : public MotionFilter {
+class Sample_rotaionHighPassFilter : public MotionFilter
+{
 public:
-  explicit Sample_rHPF(unsigned int t_ms, const double &cutoff)
+  explicit Sample_rotaionHighPassFilter(unsigned int t_ms, const double &cutoff)
       : MotionFilter(t_ms, cutoff){};
   double doFilter(const double &);
 };

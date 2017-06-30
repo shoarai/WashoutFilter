@@ -8,10 +8,12 @@ using namespace std;
 
 const unsigned int interval_ms = 10;
 
-int main() {
+int main()
+{
   shared_ptr<IWashoutFilter> washout(new SampleWashoutFilter(interval_ms));
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 4; i++)
+  {
     Motion motion(0, 1, 2, 3, 4, 5);
     Position position = washout->doFilter(motion);
 

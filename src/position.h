@@ -1,11 +1,15 @@
 // Copyright (c) 2017 shoarai
 
-class Position {
+class Position
+{
 public:
   Position() : m_x(), m_y(), m_z(), m_phi(), m_theta(), m_psi() {}
-  Position(const double &translationX, const double &translationY,
-           const double &translationZ, const double &rotationX,
-           const double &rotationY, const double &rotationZ)
+  Position(const double &translationX,
+           const double &translationY,
+           const double &translationZ,
+           const double &rotationX,
+           const double &rotationY,
+           const double &rotationZ)
       : m_x(translationX), m_y(translationY), m_z(translationZ),
         m_phi(rotationX), m_theta(rotationY), m_psi(rotationZ) {}
   ~Position(){};

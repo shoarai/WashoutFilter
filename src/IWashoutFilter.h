@@ -3,7 +3,8 @@
 #include "Motion.h"
 #include "Position.h"
 
-class IWashoutFilter {
+class IWashoutFilter
+{
 public:
   virtual Position doFilter(Motion &motion) = 0;
 };
