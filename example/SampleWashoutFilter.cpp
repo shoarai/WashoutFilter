@@ -37,7 +37,10 @@ SampleWashoutFilter::SampleWashoutFilter(const double &interval_ms)
   washout = new WashoutFilter(tHPFs, rLPFs, rHPFs, interval_ms);
 }
 
-SampleWashoutFilter::~SampleWashoutFilter() { delete washout; }
+SampleWashoutFilter::~SampleWashoutFilter()
+{
+  delete washout;
+}
 
 Position SampleWashoutFilter::doFilter(Motion &motion)
 {

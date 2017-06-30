@@ -3,7 +3,6 @@
 #include "WashoutFilter.h"
 #include "typedef.h"
 
-#include <iostream> // for memset
 #include <math.h>
 
 WashoutFilter::WashoutFilter(
@@ -11,8 +10,10 @@ WashoutFilter::WashoutFilter(
     IFilter *TranslationLowPassFilter[2],
     IFilter *RotationHighPassFilter[3],
     unsigned int interval_ms)
-    : interval_ms(interval_ms), GRAVITY_mm(9.80665 * 1000), m_x(), m_y(), m_z(),
-      m_phi(), m_sit(), m_psi(), m_vx(), m_vy(), m_vz(),
+    : interval_ms(interval_ms), GRAVITY_mm(9.80665 * 1000),
+      m_x(), m_y(), m_z(),
+      m_phi(), m_sit(), m_psi(),
+      m_vx(), m_vy(), m_vz(),
       phi_t(), phi_r(), sit_t(), sit_r(),
       gravityX(), gravityY(), gravityZ(),
       transScale(1), rotateScale(1)
@@ -54,13 +55,13 @@ Position WashoutFilter::doFilter(Motion &motion)
   double ay_hp = tHPFs[1]->doFilter(ay_g);
   double az_hp = tHPFs[2]->doFilter(az_g);
 
-  m_vx = timeInteg(m_vx, ax_hp);
-  m_vy = timeInteg(m_vy, ay_hp);
-  m_vz = timeInteg(m_vz, az_hp);
+  m_vx = integrateWithTime(m_vx, ax_hp);
+  m_vy = integrateWithTime(m_vy, ay_hp);
+  m_vz = integrateWithTime(m_vz, az_hp);
 
-  m_x = timeInteg(m_x, m_vx);
-  m_y = timeInteg(m_y, m_vy);
-  m_z = timeInteg(m_z, m_vz);
+  m_x = integrateWithTime(m_x, m_vx);
+  m_y = integrateWithTime(m_y, m_vy);
+  m_z = integrateWithTime(m_z, m_vz);
 
   //------------------------------------------//
   // Tilt-coordination
@@ -68,7 +69,7 @@ Position WashoutFilter::doFilter(Motion &motion)
   double ax_lp = rLPFs[0]->doFilter(ax_scale);
   double ay_lp = rLPFs[1]->doFilter(ay_scale);
 
-  // Convert low pass acceraration to tilt angle
+  // Convert low pass filtered accerarations to tilt angles
   sit_t = -asin(ax_lp / GRAVITY_mm);
   phi_t = asin(ay_lp / GRAVITY_mm);
 
@@ -107,9 +108,9 @@ Position WashoutFilter::doFilter(Motion &motion)
   double wsit_hp = rHPFs[1]->doFilter(vsit_scale);
   double wpsi_hp = rHPFs[2]->doFilter(vpsi_scale);
 
-  phi_r = timeInteg(phi_r, wphi_hp);
-  sit_r = timeInteg(sit_r, wsit_hp);
-  m_psi = timeInteg(m_psi, wpsi_hp);
+  phi_r = integrateWithTime(phi_r, wphi_hp);
+  sit_r = integrateWithTime(sit_r, wsit_hp);
+  m_psi = integrateWithTime(m_psi, wpsi_hp);
 
   //------------------------------------------//
   // Tilt ＋ Rotation
@@ -118,7 +119,7 @@ Position WashoutFilter::doFilter(Motion &motion)
   m_sit = sit_t + sit_r;
 
   //------------------------------------------//
-  // Calculate gs
+  // Calculate gravity in vehicle coordinate (gs)
   //------------------------------------------//
   double sphi = sin(m_phi);
   double cphi = cos(m_phi);

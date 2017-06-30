@@ -34,7 +34,7 @@ private:
   double transScale;        // Scale for translation
   double rotateScale;       // Scale for rotation
 
-  inline double timeInteg(const double &x, const double &v)
+  inline double integrateWithTime(const double &x, const double &v)
   {
     return (x + (v * interval_ms / 1000));
   }
