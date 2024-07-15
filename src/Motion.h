@@ -1,5 +1,7 @@
 // Copyright (c) 2017 shoarai
 
+namespace WashoutFilter
+{
 class Motion
 {
 public:
@@ -23,3 +25,4 @@ public:
 private:
   double aX, aY, aZ, vPhi, vTheta, vPsi;
 };
+}

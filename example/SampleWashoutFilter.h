@@ -2,6 +2,8 @@
 
 #include "../src/WashoutFilter.h"
 
+namespace WashoutFilter
+{
 class SampleWashoutFilter : public IWashoutFilter
 {
 public:
@@ -10,5 +12,6 @@ public:
   Position doFilter(Motion &motion);
 
 private:
-  WashoutFilter *washout;
+  std::shared_ptr<WashoutFilter> washout;
 };
+}

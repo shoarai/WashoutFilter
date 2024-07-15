@@ -2,6 +2,8 @@
 
 #include "../src/MotionFilter.h"
 
+namespace WashoutFilter
+{
 class Sample_translationHighPassFilter : public MotionFilter
 {
 public:
@@ -30,3 +32,4 @@ public:
       : MotionFilter(t_ms, cutoff){};
   double doFilter(const double &);
 };
+}

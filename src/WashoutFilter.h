@@ -1,15 +1,21 @@
 // Copyright (c) 2017 shoarai
 
+#include <array>
+#include <memory>
+
 #include "IWashoutFilter.h"
 
 #include "IFilter.h"
 
+namespace WashoutFilter
+{
 class WashoutFilter : public IWashoutFilter
 {
 public:
-  WashoutFilter(IFilter *TranslationHighPassFilter[3],
-                IFilter *TranslationLowPassFilter[2],
-                IFilter *RotationHighPassFilter[3], unsigned int t_ms);
+	WashoutFilter(const std::array<std::shared_ptr<IFilter>, 3>& TranslationHighPassFilter,
+	              const std::array<std::shared_ptr<IFilter>, 2>& TranslationLowPassFilter,
+	              const std::array<std::shared_ptr<IFilter>, 3>& RotationHighPassFilter,
+	              unsigned int t_ms);
   ~WashoutFilter();
 
   Position doFilter(Motion &motion);
@@ -17,9 +23,9 @@ public:
   void setRotationScale(const double &scale);
 
 private:
-  IFilter *tHPFs[3];
-  IFilter *rLPFs[2];
-  IFilter *rHPFs[3];
+	std::array<std::shared_ptr<IFilter>, 3> tHPFs;
+	std::array<std::shared_ptr<IFilter>, 2> rLPFs;
+	std::array<std::shared_ptr<IFilter>, 3> rHPFs;
 
   const double GRAVITY_mm; // [mm/s2]
   double gravityX;
@@ -39,3 +45,4 @@ private:
     return (x + (v * interval_ms / 1000));
   }
 };
+}

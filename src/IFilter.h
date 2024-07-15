@@ -2,8 +2,11 @@
 
 #pragma once
 
+namespace WashoutFilter
+{
 class IFilter
 {
 public:
   virtual double doFilter(const double &input) = 0;
 };
+}

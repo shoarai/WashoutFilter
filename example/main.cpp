@@ -1,10 +1,12 @@
 // Copyright (c) 2017 shoarai
 
 #include "SampleWashoutFilter.h"
-#include "unistd.h"
+//#include "unistd.h"
 #include <iostream>
+#include <thread>
 
 using namespace std;
+using namespace WashoutFilter;
 
 const unsigned int interval_ms = 10;
 
@@ -29,7 +31,7 @@ int main()
     // phi: 	0.0296297
     // theta: 0.0395062
     // psi:   0.0493827
-    sleep(1);
+    this_thread::sleep_for(std::chrono::seconds(1));
   }
 
   cout << "end" << '\n';

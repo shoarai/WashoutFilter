@@ -2,6 +2,8 @@
 
 #include "IFilter.h"
 
+namespace WashoutFilter
+{
 class MotionFilter : public IFilter
 {
 protected:
@@ -26,3 +28,4 @@ public:
   explicit MotionFilter(unsigned int t, const double &cutoff);
   virtual ~MotionFilter(){};
 };
+}

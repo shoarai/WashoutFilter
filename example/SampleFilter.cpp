@@ -2,6 +2,8 @@
 
 #include "SampleFilter.h"
 
+namespace WashoutFilter
+{
 double Sample_translationHighPassFilter::doFilter(const double &input0)
 {
   input[DELAY_0] = input0;
@@ -66,4 +68,5 @@ double Sample_rotaionHighPassFilter::doFilter(const double &input0)
   output[1] = output[0];
 
   return output[0];
+}
 }

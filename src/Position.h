@@ -1,5 +1,7 @@
 // Copyright (c) 2017 shoarai
 
+namespace WashoutFilter
+{
 class Position
 {
 public:
@@ -24,3 +26,4 @@ public:
 private:
   double m_x, m_y, m_z, m_phi, m_theta, m_psi;
 };
+}

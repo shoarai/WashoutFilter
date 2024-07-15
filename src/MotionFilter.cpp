@@ -2,6 +2,8 @@
 
 #include "MotionFilter.h"
 
+namespace WashoutFilter
+{
 MotionFilter::MotionFilter(unsigned int t_ms, const double &cutoff)
     : time_ms(t_ms), cutoffFrequency(cutoff)
 {
@@ -9,4 +11,5 @@ MotionFilter::MotionFilter(unsigned int t_ms, const double &cutoff)
   {
     input[i] = output[i] = 0;
   }
+}
 }

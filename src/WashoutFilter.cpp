@@ -5,10 +5,12 @@
 
 #include <math.h>
 
+namespace WashoutFilter
+{
 WashoutFilter::WashoutFilter(
-    IFilter *TranslationHighPassFilter[3],
-    IFilter *TranslationLowPassFilter[2],
-    IFilter *RotationHighPassFilter[3],
+	const std::array<std::shared_ptr<IFilter>, 3>& TranslationHighPassFilter,
+	const std::array<std::shared_ptr<IFilter>, 2>& TranslationLowPassFilter,
+	const std::array<std::shared_ptr<IFilter>, 3>& RotationHighPassFilter,
     unsigned int interval_ms)
     : interval_ms(interval_ms), GRAVITY_mm(9.80665 * 1000),
       m_x(), m_y(), m_z(),
@@ -16,19 +18,13 @@ WashoutFilter::WashoutFilter(
       m_vx(), m_vy(), m_vz(),
       phi_t(), phi_r(), sit_t(), sit_r(),
       gravityX(), gravityY(), gravityZ(),
-      transScale(1), rotateScale(1)
+      transScale(1), rotateScale(1),
+      tHPFs(TranslationHighPassFilter),
+      rLPFs(TranslationLowPassFilter),
+      rHPFs(RotationHighPassFilter)
 {
-  tHPFs[0] = TranslationHighPassFilter[0];
-  tHPFs[1] = TranslationHighPassFilter[1];
-  tHPFs[2] = TranslationHighPassFilter[2];
-
-  rLPFs[0] = TranslationLowPassFilter[0];
-  rLPFs[1] = TranslationLowPassFilter[1];
-
-  rHPFs[0] = RotationHighPassFilter[0];
-  rHPFs[1] = RotationHighPassFilter[1];
-  rHPFs[2] = RotationHighPassFilter[2];
 }
+
 
 WashoutFilter::~WashoutFilter()
 {
@@ -47,9 +43,9 @@ Position WashoutFilter::doFilter(Motion &motion)
   double ay_scale = motion.getAccelerationY() * transScale;
   double az_scale = motion.getAccelerationZ() * transScale;
 
-  double ax_g = ax_scale + gravityX;
-  double ay_g = ay_scale + gravityY;
-  double az_g = az_scale + gravityZ - GRAVITY_mm;
+  double ax_g = ax_scale;
+  double ay_g = ay_scale;
+  double az_g = az_scale;
 
   double ax_hp = tHPFs[0]->doFilter(ax_g);
   double ay_hp = tHPFs[1]->doFilter(ay_g);
@@ -70,8 +66,8 @@ Position WashoutFilter::doFilter(Motion &motion)
   double ay_lp = rLPFs[1]->doFilter(ay_scale);
 
   // Convert low pass filtered accerarations to tilt angles
-  sit_t = -asin(ax_lp / GRAVITY_mm);
-  phi_t = asin(ay_lp / GRAVITY_mm);
+  sit_t = -asin(ax_lp);
+  phi_t = asin(ay_lp);
 
   // Check asin error
   if (!(-deg2rad(90) <= sit_t && sit_t <= deg2rad(90)))
@@ -125,9 +121,9 @@ Position WashoutFilter::doFilter(Motion &motion)
   double cphi = cos(m_phi);
   double ssit = sin(m_sit);
   double csit = cos(m_sit);
-  gravityX = GRAVITY_mm * (-ssit);
-  gravityY = GRAVITY_mm * sphi * csit;
-  gravityZ = GRAVITY_mm * cphi * csit;
+  //gravityX = GRAVITY_mm * (-ssit);
+  //gravityY = GRAVITY_mm * sphi * csit;
+  //gravityZ = GRAVITY_mm * cphi * csit;
 
   Position position(m_x, m_y, m_z, m_phi, m_sit, m_psi);
   return position;
@@ -141,4 +137,5 @@ void WashoutFilter::setTranslationScale(const double &scale)
 void WashoutFilter::setRotationScale(const double &scale)
 {
   rotateScale = scale;
+}
 }
